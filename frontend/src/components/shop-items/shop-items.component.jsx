@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./shop-items.styles.scss";
 import ShopItemCard from "../shop-item-card/shopItemCard.component";
 import { connect } from "react-redux";
-const ShopItem = ({ product }) => {
+import { getProductByCategory } from "../../redux/producs/products.action";
+
+const ShopItem = ({ product, getProductByCategory, match }) => {
+  const category = match.params.catId;
+
+  useEffect(() => {
+    getProductByCategory(category);
+  }, [category, getProductByCategory]);
+
   return (
     <main className="products">
       {product &&
@@ -17,4 +25,4 @@ const mapStateToProps = (state) => ({
   product: state.products.product[0],
 });
 
-export default connect(mapStateToProps)(ShopItem);
+export default connect(mapStateToProps, { getProductByCategory })(ShopItem);
