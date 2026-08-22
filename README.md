@@ -1,123 +1,202 @@
-Manual Deployment Guide
-1. Clone the Repository
+# Ecommerce Store
 
-Clone the project from GitHub:
+A full-stack e-commerce application with a React frontend and a Node.js/Express backend.
 
-git clone <repository-url>
+## Tech Stack
 
-Move into the project directory:
+### Frontend
 
-cd ecommerce-store
-2. Project Structure
+- React
+- Redux
+- React Router
+- Axios
+- SCSS
 
-The project contains two main applications:
+### Backend
 
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- PM2
+
+---
+
+# Project Structure
+
+```text
 ecommerce-store/
 │
 ├── frontend/
-│   └── React application
+│   ├── src/
+│   ├── package.json
+│   └── ...
 │
-└── backend/
-    └── Node.js / Express application
+├── backend/
+│   ├── model/
+│   ├── routes/
+│   ├── app.js
+│   ├── package.json
+│   └── ...
+│
+└── README.md
+```
 
-The frontend sends API requests to the backend, and the backend connects to MongoDB.
+---
 
-3. Install Backend Dependencies
+# Manual Setup and Deployment
+
+This project was manually set up and run locally using Node.js, npm, PM2, and MongoDB.
+
+## Prerequisites
+
+Make sure the following are installed:
+
+- Git
+- Node.js
+- npm
+- PM2
+- Access to MongoDB
+
+Check the installations:
+
+```bash
+git --version
+node --version
+npm --version
+pm2 --version
+```
+
+---
+
+# 1. Clone the Repository
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+```
+
+Move into the project directory:
+
+```bash
+cd ecommerce-store
+```
+
+---
+
+# 2. Backend Setup
 
 Navigate to the backend directory:
 
+```bash
 cd backend
+```
 
-Install the required Node.js packages:
+Install the backend dependencies:
 
+```bash
 npm install
+```
 
-This installs dependencies defined in:
+The dependencies are installed based on:
 
+```text
 backend/package.json
-4. Configure Environment Variables
+```
 
-Create a .env file inside the backend directory.
+---
+
+# 3. Configure Environment Variables
+
+Create a `.env` file inside the `backend` directory.
 
 Example:
 
+```env
 DB_CONNECTION=<your-mongodb-connection-string>
 TOKEN_SECRET=<your-jwt-secret>
+```
 
-These values are required for:
+These environment variables are used by the backend for:
 
-Connecting the backend to MongoDB.
-Creating JWT tokens during login.
+- Connecting to MongoDB
+- JWT authentication
 
-Do not push the .env file or real secrets to GitHub.
+> **Important:** Do not commit the `.env` file or actual credentials to GitHub.
 
-5. Seed the Product Database
+---
 
-The application uses MongoDB to store product data.
-
-Run:
-
-node seed.js
-
-This performs the following:
-
-shop-data.js
-      ↓
-seed.js
-      ↓
-MongoDB
-      ↓
-Product collection
-
-The seed script:
-
-Deletes existing product documents.
-Inserts the product data from shop-data.js.
-Closes the MongoDB connection.
-6. Start the Backend
+# 4. Start the Backend Using PM2
 
 Start the backend application:
 
-node app.js
-
-For keeping the application running as a process, we used PM2:
-
+```bash
 pm2 start app.js --name backend
+```
 
-Check running processes:
+Check whether the backend process is running:
 
+```bash
 pm2 status
+```
 
-Check logs:
+View backend logs:
 
+```bash
 pm2 logs backend
+```
 
-Restart the backend after changes:
+Restart the backend after making backend changes:
 
+```bash
 pm2 restart backend
-7. Install Frontend Dependencies
+```
+
+---
+
+# 5. Frontend Setup
 
 Open another terminal and navigate to the frontend directory:
 
-cd frontend
+```bash
+cd ecommerce-store/frontend
+```
 
-Install the required packages:
+Install the frontend dependencies:
 
+```bash
 npm install
-8. Start the Frontend
+```
 
-Run:
+The dependencies are installed based on:
 
+```text
+frontend/package.json
+```
+
+---
+
+# 6. Start the Frontend
+
+Start the React application:
+
+```bash
 npm start
+```
 
-This starts the React development server.
+This starts the React application locally.
 
-The frontend can then be accessed through the browser at the URL displayed by the React application.
+Open the URL displayed in the terminal to access the application.
 
-9. Application Flow
+---
 
-The complete manually deployed application works as follows:
+# Application Flow
 
+The application works as follows:
+
+```text
 User
   ↓
 React Frontend
@@ -128,100 +207,226 @@ Node.js / Express Backend
   ↓
 MongoDB
   ↓
-Express API Response
+API Response
   ↓
 Redux Store
   ↓
 React Components
   ↓
 Products Displayed
-10. Product Category Flow
+```
 
-When a user selects a category such as:
+---
 
-Mens
+# Backend Process Flow
 
-The URL becomes:
+The backend application is managed using PM2.
 
-/shop/mens
-
-The ShopItem component reads the category from the URL:
-
-match.params.catId
-
-For /shop/mens:
-
-catId = "mens"
-
-The component then calls:
-
-GET /api/v1/product/mens
-
-The backend queries MongoDB:
-
-Product.find({
-  routeName: req.params["cat_name"],
-});
-
-MongoDB returns the matching category and its products.
-
-The data flow is:
-
-/shop/mens
-      ↓
-ShopItem
-      ↓
-useEffect()
-      ↓
-getProductByCategory("mens")
-      ↓
-Axios
-      ↓
-GET /api/v1/product/mens
-      ↓
-Express Backend
-      ↓
+```text
+PM2
+ ↓
+backend
+ ↓
+app.js
+ ↓
+Node.js / Express
+ ↓
 MongoDB
-      ↓
-Redux Store
-      ↓
-ShopItemCard
-      ↓
-Products Displayed
-11. Updating the Application
+```
 
-After making changes locally:
+PM2 helps manage the backend process and provides commands to check status, logs, restart, stop, and delete the process.
 
-git status
+---
 
-Add the changes:
+# Useful PM2 Commands
 
-git add .
+Check all PM2 processes:
 
-Commit them:
+```bash
+pm2 status
+```
 
-git commit -m "Update application"
+View backend logs:
 
-Push them to GitHub:
+```bash
+pm2 logs backend
+```
 
-git push origin main
-Complete Manual Deployment Flow
+Restart the backend:
+
+```bash
+pm2 restart backend
+```
+
+
+---
+
+# Complete Manual Setup Flow
+
+```text
 GitHub Repository
         ↓
 git clone
         ↓
 Local Machine
         ↓
-Install Backend Dependencies
+Backend Setup
+        ↓
+npm install
         ↓
 Configure .env
         ↓
-Seed MongoDB
-        ↓
 Start Backend with PM2
         ↓
-Install Frontend Dependencies
+Frontend Setup
         ↓
-Start React Frontend
+npm install
+        ↓
+npm start
         ↓
 Access Application
+```
+
+---
+
+# Updating the Application
+
+After making changes locally, check the modified and newly created files:
+
+```bash
+git status
+```
+
+Add the changes:
+
+```bash
+git add .
+```
+
+Commit the changes:
+
+```bash
+git commit -m "Update application"
+```
+
+Push the changes to GitHub:
+
+```bash
+git push origin main
+```
+
+---
+
+# Complete Git Workflow
+
+```text
+GitHub Repository
+        ↓
+git clone
+        ↓
+Local Repository
+        ↓
+Make Changes
+        ↓
+git status
+        ↓
+git add .
+        ↓
+git commit
+        ↓
+git push
+        ↓
+GitHub Repository
+```
+
+---
+
+# Quick Setup Commands
+
+## Backend
+
+```bash
+git clone <repository-url>
+
+cd ecommerce-store/backend
+
+npm install
+
+pm2 start app.js --name backend
+
+pm2 status
+
+pm2 logs backend
+```
+
+## Frontend
+
+Open another terminal:
+
+```bash
+cd ecommerce-store/frontend
+
+npm install
+
+npm start
+```
+
+---
+
+# Quick Update Commands
+
+After making changes:
+
+```bash
+git status
+
+git add .
+
+git commit -m "Update application"
+
+git push origin main
+```
+
+If backend files were changed:
+
+```bash
+pm2 restart backend
+```
+
+---
+
+# Important Notes
+
+> Make sure MongoDB connection details are correctly configured in the `.env` file.
+
+> Do not commit `.env` files or secrets to GitHub.
+
+> The backend is run and managed using PM2.
+
+> The frontend is started using `npm start`.
+
+> After backend changes, restart the PM2 process using:
+
+```bash
+pm2 restart backend
+```
+
+---
+
+# Summary
+
+```text
+Clone Repository
+       ↓
+Install Backend Dependencies
+       ↓
+Configure Environment Variables
+       ↓
+Start Backend with PM2
+       ↓
+Install Frontend Dependencies
+       ↓
+Start Frontend with npm start
+       ↓
+Access Application
+```
