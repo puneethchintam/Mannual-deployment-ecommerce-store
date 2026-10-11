@@ -35,6 +35,12 @@ spec:
                   name: backend-secret
                   key: TOKEN_SECRET
 
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: TOKEN_SECRET
+
 ---
 apiVersion: v1
 kind: Service
